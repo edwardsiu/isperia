@@ -1,0 +1,18 @@
+{
+    "extends": "airbnb",
+    "rules": {
+        "indent": [2, 4],
+        "object-curly-newline": ["error", {
+            "ObjectExpression": {
+                "minProperties": 2,
+                "consistent": true
+            },
+            "ObjectPattern": { "multiline": true },
+            "ImportDeclaration": { "multiline": true },
+            "ExportDeclaration": {
+                "minProperties": 2,
+                "consistent": true
+            }
+        }]
+    }
+}
