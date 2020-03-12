@@ -4,7 +4,7 @@ const Player = {
     name: 'player',
     schema: {
         url: { type: STRING },
-        commander: { type: STRING },
+        commander: { type: JSONB },
         decklist: { type: JSONB },
     },
     options: {},
