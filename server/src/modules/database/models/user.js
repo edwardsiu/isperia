@@ -1,11 +1,12 @@
-const { STRING, JSONB, UUIDV4 } = require('sequelize');
+const { STRING, JSONB, UUID, UUIDV4 } = require('sequelize');
 
 const User = {
     name: 'user',
     schema: {
         id: {
-            type: UUIDV4,
+            type: UUID,
             primaryKey: true,
+            defaultValue: UUIDV4,
         },
         name: {
             type: STRING,

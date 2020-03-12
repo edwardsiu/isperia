@@ -1,14 +1,15 @@
-const { BOOLEAN, STRING, UUIDV4 } = require('sequelize');
+const { BOOLEAN, STRING, UUID, UUIDV4 } = require('sequelize');
 
 const Game = {
     name: 'game',
     schema: {
         id: {
-            type: UUIDV4,
+            type: UUID,
             primaryKey: true,
+            defaultValue: UUIDV4,
         },
         hub_id: {
-            type: UUIDV4,
+            type: UUID,
         },
         source: {
             type: STRING,

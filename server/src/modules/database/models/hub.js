@@ -1,11 +1,12 @@
-const { INTEGER, STRING, UUIDV4 } = require('sequelize');
+const { INTEGER, STRING, UUID, UUIDV4 } = require('sequelize');
 
 const Hub = {
     name: 'hub',
     schema: {
         id: {
-            type: UUIDV4,
+            type: UUID,
             primaryKey: true,
+            defaultValue: UUIDV4,
         },
         name: {
             type: STRING,

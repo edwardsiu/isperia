@@ -1,14 +1,14 @@
-const { UUIDV4 } = require('sequelize');
+const { UUID } = require('sequelize');
 
 const HubMember = {
     name: 'hub_member',
     schema: {
         user_id: {
-            type: UUIDV4,
+            type: UUID,
             primaryKey: true,
         },
         hub_id: {
-            type: UUIDV4,
+            type: UUID,
             primaryKey: true,
         },
     },

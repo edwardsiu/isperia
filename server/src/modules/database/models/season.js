@@ -1,14 +1,15 @@
-const { DATE, INTEGER, JSONB, UUIDV4 } = require('sequelize');
+const { DATE, INTEGER, JSONB, UUID, UUIDV4 } = require('sequelize');
 
 const Season = {
     name: 'season',
     schema: {
         id: {
-            type: UUIDV4,
+            type: UUID,
             primaryKey: true,
+            defaultValue: UUIDV4,
         },
         hub_id: {
-            type: UUIDV4,
+            type: UUID,
             allowNull: false,
         },
         season_number: {
