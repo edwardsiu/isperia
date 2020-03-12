@@ -3,9 +3,9 @@ const KoaRouter = require('koa-router');
 // const logger = require('../../modules/logger').named('players');
 const { DeckService } = require('../../services/deck_service');
 
-const players = new KoaRouter();
+const playersRouter = new KoaRouter();
 
-players.post('createPlayer', '/', async (ctx) => {
+playersRouter.post('createPlayer', '/', async (ctx) => {
     const { url } = ctx.request.body;
     const deck = await DeckService.fetch(url);
     await ctx.db.Player.create({
@@ -17,5 +17,5 @@ players.post('createPlayer', '/', async (ctx) => {
 });
 
 module.exports = {
-    players,
+    playersRouter,
 };
