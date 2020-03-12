@@ -10,7 +10,7 @@ players.post('createPlayer', '/', async (ctx) => {
     const deck = await DeckService.fetch(url);
     await ctx.db.Player.create({
         url,
-        commander: deck.commanders.sort().join(','),
+        commander: deck.commanders,
         decklist: deck.decklist,
     });
     ctx.status = HttpStatus.OK;
