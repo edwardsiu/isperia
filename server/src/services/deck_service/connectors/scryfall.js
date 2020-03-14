@@ -1,7 +1,6 @@
 const axios = require('axios');
 const _ = require('lodash');
 const { URL } = require('url');
-const isValidUUID = require('uuid-validate');
 const xml2js = require('xml2js');
 
 function matches(url) {
@@ -16,14 +15,15 @@ function toObject(obj, card) {
 }
 
 function extractDeckId(url) {
-    return _.last(_.trim(url, '/').split('/'));
+    const result = url.match(/(?<=decks\/)[\w\d]{8}-[\w\d]{4}-[\w\d]{4}-[\w\d]{4}-[\w\d]{12}/);
+    if (!result) {
+        throw new Error('Failed to extract deck id; invalid Scryfall url');
+    }
+    return result[0];
 }
 
 async function fetch(url) {
     const deckId = extractDeckId(url);
-    if (!isValidUUID(deckId)) {
-        throw new Error(`Not a valid deckId: ${deckId}`);
-    }
     const response = await axios.request({
         method: 'GET',
         url: `https://api.scryfall.com/decks/${deckId}/export/dek`,
