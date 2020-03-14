@@ -1,18 +1,15 @@
-const { BOOLEAN, STRING, JSONB, UUID, UUIDV4 } = require('sequelize');
+const { BOOLEAN, STRING, JSONB, UUID } = require('sequelize');
 
 const Player = {
     name: 'player',
     schema: {
-        id: {
-            type: UUID,
-            primaryKey: true,
-            defaultValue: UUIDV4,
-        },
         user_id: {
             type: UUID,
+            primaryKey: true,
         },
         game_id: {
             type: UUID,
+            primaryKey: true,
         },
         hub_id: {
             type: UUID,
@@ -27,15 +24,12 @@ const Player = {
         },
         url: {
             type: STRING,
-            allowNull: false,
         },
         commander: {
             type: JSONB,
-            allowNull: false,
         },
         decklist: {
             type: JSONB,
-            allowNull: false,
         },
     },
     options: {},
