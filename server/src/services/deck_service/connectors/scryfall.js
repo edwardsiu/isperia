@@ -10,7 +10,7 @@ function matches(url) {
 
 function toObject(obj, card) {
     return Object.assign(obj, {
-        [card.Name]: Number(card.Quantity),
+        [card.Name]: { quantity: Number(card.Quantity) },
     });
 }
 

@@ -8,7 +8,7 @@ function matches(url) {
 
 function toObject(obj, card) {
     return Object.assign(obj, {
-        [card.card.oracleCard.name]: Number(card.quantity),
+        [card.card.oracleCard.name]: { quantity: Number(card.quantity) },
     });
 }
 
@@ -26,7 +26,7 @@ async function fetch(url) {
         method: 'GET',
         url: `https://archidekt.com/api/decks/${deckId}`,
     });
-    const cards = { response };
+    const { cards } = response.data;
     const commanders = cards.filter((card) => card.category === 'Commander').reduce(toObject, {});
     if (commanders.length === 0) {
         throw new Error('Not a commander decklist');
