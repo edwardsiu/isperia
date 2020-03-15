@@ -1,11 +1,11 @@
 const { CronJob } = require('cron');
-const { collateCards } = require('./collate_cards');
+const { generateCardReport } = require('./card_report');
 
 // Runs once an hour on the 0 mark
-const collateCardsJob = new CronJob('0 0 * * * *', collateCards);
+const cardReportJob = new CronJob('0 0 * * * *', generateCardReport);
 
 function startAll() {
-    collateCardsJob.start();
+    cardReportJob.start();
 }
 
 module.exports = {

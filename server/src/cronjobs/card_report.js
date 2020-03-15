@@ -1,8 +1,19 @@
 const _ = require('lodash');
 const { Database } = require('../modules/database');
 
+function toObject(obj, card) {
+    // Initialize wins and win_rate to 0
+    return Object.assign(obj, {
+        [card.name]: {
+            count: Number(card.count),
+            wins: 0,
+            win_rate: 0.0,
+        },
+    });
+}
+
 /**
- * Pulls deck metadata from the database.
+ * Pulls card metadata from the database at the specified column.
  * - Number of entries in the `players` table
  * - Count of each card that appears at least once in a decklist
  * - Count of each card that appears in a winning decklist
@@ -10,11 +21,11 @@ const { Database } = require('../modules/database');
  * @param {Object<Database>} database Database to run the queries against
  * @returns {Object}
  */
-async function extractCardData(database) {
-    const SELECT_ALL_CARDS = 'SELECT jsonb_object_keys(players.decklist) as name FROM players WHERE players.is_verified=true';
+async function extractCardData(database, column) {
+    const SELECT_ALL_CARDS = `SELECT jsonb_object_keys(players.${column}) as name FROM players WHERE players.is_verified=true`;
     const SELECT_WINNING_CARDS = `${SELECT_ALL_CARDS} AND players.is_winner=true`;
     const [numDecks] = await database.sequelize.query(
-        'SELECT count(*) FROM players',
+        'SELECT count(*) FROM players WHERE players.is_verified=true',
     );
     const [allCardsData] = await database.sequelize.query(
         `SELECT cards.name, count(cards.name) FROM (${SELECT_ALL_CARDS}) cards GROUP BY cards.name`,
@@ -29,18 +40,7 @@ async function extractCardData(database) {
     };
 }
 
-function toObject(obj, card) {
-    // Initialize wins and win_rate to 0
-    return Object.assign(obj, {
-        [card.name]: {
-            count: Number(card.count),
-            wins: 0,
-            win_rate: 0.0,
-        },
-    });
-}
-
-function calculateStats(cards, winningCards, numDecks) {
+function calculateCardStats(cards, winningCards, numDecks) {
     const PRECISION = 6;
     const cardsObj = cards.reduce(toObject, {});
     winningCards.forEach((card) => {
@@ -57,16 +57,26 @@ function calculateStats(cards, winningCards, numDecks) {
     }));
 }
 
-async function collateCards() {
+async function extractAndTransformCardData(database, column) {
+    const { cards, winningCards, numDecks } = await extractCardData(database, column);
+    const stats = calculateCardStats(cards, winningCards, numDecks);
+    return stats;
+}
+
+async function generateCardReport() {
     const database = new Database();
-    const { cards, winningCards, numDecks } = await extractCardData(database);
-    const stats = calculateStats(cards, winningCards, numDecks);
+    const cardData = await extractAndTransformCardData(database, 'decklist');
     await database.Report.upsert({
         name: 'card_data',
-        data: stats,
+        data: cardData,
+    });
+    const commanderData = await extractAndTransformCardData(database, 'commanders');
+    await database.Report.upsert({
+        name: 'commander_data',
+        data: commanderData,
     });
 }
 
 module.exports = {
-    collateCards,
+    generateCardReport,
 };
