@@ -6,11 +6,12 @@ const { Database } = require('./modules/database');
 const logger = require('./modules/logger').named('server');
 const { middleware } = require('./middlewares');
 const { router } = require('./routes');
+const cronJobs = require('./cronjobs');
 
 
 const app = new Koa();
 app.context.db = new Database();
-app.context.db.sync({ force: true });
+// app.context.db.sync();
 app.use(middleware.traceRequests);
 app.use(middleware.errorHandler);
 app.use(KoaBody({
@@ -24,4 +25,7 @@ app.on('error', (err, ctx) => {
 });
 
 const PORT = config.get('server.port');
-app.listen(PORT, () => logger.info(`Running on port ${PORT}`));
+app.listen(PORT, () => {
+    logger.info(`Running on port ${PORT}`);
+    cronJobs.startAll();
+});
