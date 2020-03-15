@@ -25,7 +25,7 @@ const Player = {
         url: {
             type: STRING,
         },
-        commander: {
+        commanders: {
             type: JSONB,
         },
         decklist: {
