@@ -3,7 +3,7 @@ const { URL } = require('url');
 
 function matches(url) {
     const parsed = new URL(url);
-    return (parsed.hostname === 'archidekt.com') && (url.search(/\/decks\/\d+#/) > 0);
+    return (parsed.hostname === 'archidekt.com') && (url.search(/\/decks\/\d+/) > 0);
 }
 
 function toObject(obj, card) {
@@ -13,7 +13,7 @@ function toObject(obj, card) {
 }
 
 function extractDeckId(url) {
-    const result = url.match(/(?<=decks\/)\d+(?=#)/);
+    const result = url.match(/(?<=decks\/)\d+/);
     if (!result) {
         throw new Error('Failed to extract deck id; invalid Archidekt url');
     }
@@ -24,7 +24,7 @@ async function fetch(url) {
     const deckId = extractDeckId(url);
     const response = await axios.request({
         method: 'GET',
-        url: `https://archidekt.com/api/decks/${deckId}`,
+        url: `https://archidekt.com/api/decks/${deckId}/`,
     });
     const { cards } = response.data;
     const commanders = cards.filter((card) => card.category === 'Commander').reduce(toObject, {});

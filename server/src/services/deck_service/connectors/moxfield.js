@@ -3,7 +3,7 @@ const { URL } = require('url');
 
 function matches(url) {
     const parsed = new URL(url);
-    return (parsed.hostname === 'moxfield.com') && (url.search(/\/decks\/[\w\d]+/) > 0);
+    return (parsed.hostname === 'www.moxfield.com') && (url.search(/\/decks\/[\w\d]+/) > 0);
 }
 
 function toObject(obj, entry) {
