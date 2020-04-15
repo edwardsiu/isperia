@@ -2,7 +2,6 @@ const config = require('config');
 const Koa = require('koa');
 const KoaBody = require('koa-body');
 
-const { Database } = require('./modules/database');
 const logger = require('./modules/logger').named('server');
 const { middleware } = require('./middlewares');
 const { router } = require('./routes');
@@ -10,8 +9,6 @@ const cronJobs = require('./cronjobs');
 
 
 const app = new Koa();
-app.context.db = new Database();
-// app.context.db.sync();
 app.use(middleware.traceRequests);
 app.use(middleware.errorHandler);
 app.use(KoaBody({
