@@ -26,11 +26,12 @@ async function fetch(url) {
     if (commanders.length === 0) {
         throw new Error('Not a commander decklist');
     }
-    const decklist = rawDecklistJson.reduce(toObject, {});
+    const mainboard = rawDecklistJson.reduce(toObject, {});
     return {
         url,
         commanders,
-        decklist,
+        mainboard,
+        sideboard: {},
     };
 }
 

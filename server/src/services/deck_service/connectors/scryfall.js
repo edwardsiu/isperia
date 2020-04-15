@@ -34,11 +34,12 @@ async function fetch(url) {
     if (commanders.length === 0) {
         throw new Error('Not a commander decklist');
     }
-    const decklist = cards.reduce(toObject, {});
+    const mainboard = cards.reduce(toObject, {});
     return {
         url,
         commanders,
-        decklist,
+        mainboard,
+        sideboard: {},
     };
 }
 

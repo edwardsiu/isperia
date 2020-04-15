@@ -29,7 +29,7 @@ async function fetch(url) {
         method: 'GET',
         url: `https://api.moxfield.com/v1/decks/all/${deckId}`,
     });
-    const { commander, partner, mainboard } = response.data;
+    const { commander, partner, mainboard, sideboard } = response.data;
     const commanders = {};
     if (!commander) {
         throw new Error('Not a commander decklist');
@@ -38,11 +38,13 @@ async function fetch(url) {
     if (partner) {
         commanders[partner.name] = { quantity: 1 };
     }
-    const decklist = Object.entries(mainboard).reduce(toObject, {});
+    const parsedMainboard = Object.entries(mainboard).reduce(toObject, {});
+    const parsedSideboard = Object.entries(sideboard).reduce(toObject, {});
     return {
         url,
         commanders,
-        decklist,
+        mainboard: parsedMainboard,
+        sideboard: parsedSideboard,
     };
 }
 
