@@ -1,30 +1,52 @@
-const HttpStatus = require('http-status-codes');
-const _ = require('lodash');
-const { DeckService } = require('../../services');
+const { Op } = require('sequelize');
+const { EventStatus } = require('../../modules/enums');
+const { sequelize, Event, EventMember, Game, Player } = require('../../modules/models');
 
-async function getGame(ctx) {
-    const { gameId } = ctx.params;
-    const game = await ctx.db.Game.findByPk(gameId);
-    if (!game) {
-        ctx.throw(HttpStatus.NOT_FOUND);
-    }
-    return game;
-}
-
-async function getDeckFromNameOrLink(user, deckName, deckLink) {
-    let url = deckLink;
-    if (deckName && _.has(user.saved_decks, deckName)) {
-        url = _.get(user.saved_decks, deckName);
-    }
-    if (!url) {
-        throw new Error('No deckName or deckLink specified');
-    }
-    return DeckService.fetch(url);
+/**
+ * @function createGameWithPlayers
+ * @param {string} eventId Id of the event the game is part of
+ * @param {string[]} userIds Ids of all users participating in the game
+ * @param {string} winnerId Id of the winning user
+ * @param {string} source Source of the game (ie. `discord`)
+ * @returns {Promise<any>}
+ */
+async function createGameWithPlayers(eventId, userIds, winnerId, source) {
+    const response = await sequelize.transaction(async (t) => {
+        const event = await Event.findByPk(eventId, { transaction: t });
+        if (!event || event.status !== EventStatus.active) {
+            throw new Error(`Invalid or inactive event ${eventId}`);
+        }
+        const eventMembers = await EventMember.findAll({
+            where: {
+                eventId,
+                userId: { [Op.in]: userIds },
+            },
+        }, { transaction: t });
+        if (!eventMembers || eventMembers.length !== userIds.length) {
+            throw new Error('Not all users are registered to the event');
+        }
+        const game = await Game.create({
+            eventId,
+            source,
+        }, { transaction: t });
+        const players = await Promise.all(
+            userIds.map((userId) => Player.create({
+                gameId: game.id,
+                userId,
+                eventId: event.id,
+                isWinner: winnerId === userId,
+            }, { transaction: t })),
+        );
+        return {
+            game,
+            players,
+        };
+    });
+    return response;
 }
 
 module.exports = {
     GameController: {
-        getGame,
-        getDeckFromNameOrLink,
+        createGameWithPlayers,
     },
 };

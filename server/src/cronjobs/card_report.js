@@ -1,5 +1,6 @@
 const _ = require('lodash');
-const { Database } = require('../modules/database');
+const { sequelize, Report } = require('../modules/models');
+const { Reports } = require('../modules/enums');
 
 function toObject(obj, card) {
     // Initialize wins and win_rate to 0
@@ -21,16 +22,16 @@ function toObject(obj, card) {
  * @param {Object<Database>} database Database to run the queries against
  * @returns {Object}
  */
-async function extractCardData(database, column) {
-    const SELECT_ALL_CARDS = `SELECT jsonb_object_keys(players.${column}) as name FROM players WHERE players.is_verified=true`;
-    const SELECT_WINNING_CARDS = `${SELECT_ALL_CARDS} AND players.is_winner=true`;
-    const [numDecks] = await database.sequelize.query(
-        'SELECT count(*) FROM players WHERE players.is_verified=true',
+async function extractCardData(column) {
+    const SELECT_ALL_CARDS = `SELECT jsonb_object_keys(Players.deck->${column}) as name FROM Players WHERE Players.isVerified=true`;
+    const SELECT_WINNING_CARDS = `${SELECT_ALL_CARDS} AND Players.isWinner=true`;
+    const [numDecks] = await sequelize.query(
+        'SELECT count(*) FROM players WHERE players.isVerified=true',
     );
-    const [allCardsData] = await database.sequelize.query(
+    const [allCardsData] = await sequelize.query(
         `SELECT cards.name, count(cards.name) FROM (${SELECT_ALL_CARDS}) cards GROUP BY cards.name`,
     );
-    const [allWinningCardsData] = await database.sequelize.query(
+    const [allWinningCardsData] = await sequelize.query(
         `SELECT cards.name, count(cards.name) FROM (${SELECT_WINNING_CARDS}) cards GROUP BY cards.name`,
     );
     return {
@@ -50,29 +51,28 @@ function calculateCardStats(cards, winningCards, numDecks) {
     });
     return Object.entries(cardsObj).map(([name, data]) => ({
         name,
-        count: data.count,
-        appearance_rate: _.round(data.count / numDecks, PRECISION),
+        usage: data.count,
+        usage_rate: _.round(data.count / numDecks, PRECISION),
         wins: data.wins,
         win_rate: data.win_rate,
     }));
 }
 
-async function extractAndTransformCardData(database, column) {
-    const { cards, winningCards, numDecks } = await extractCardData(database, column);
+async function extractAndTransformCardData(column) {
+    const { cards, winningCards, numDecks } = await extractCardData(column);
     const stats = calculateCardStats(cards, winningCards, numDecks);
     return stats;
 }
 
 async function generateCardReport() {
-    const database = new Database();
-    const cardData = await extractAndTransformCardData(database, 'decklist');
-    await database.Report.upsert({
-        name: 'card_data',
+    const cardData = await extractAndTransformCardData('decklist');
+    await Report.upsert({
+        name: Reports.card_data,
         data: cardData,
     });
-    const commanderData = await extractAndTransformCardData(database, 'commanders');
-    await database.Report.upsert({
-        name: 'commander_data',
+    const commanderData = await extractAndTransformCardData('commanders');
+    await Report.upsert({
+        name: Reports.commander_data,
         data: commanderData,
     });
 }

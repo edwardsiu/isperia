@@ -1,17 +1,19 @@
+const { Event } = require('./event');
+const { EventMember } = require('./event_member');
 const { Game } = require('./game');
 const { Hub } = require('./hub');
-const { HubMember } = require('./hub_member');
 const { Player } = require('./player');
 const { Report } = require('./report');
-const { Season } = require('./season');
 const { User } = require('./user');
+const { sequelize } = require('./connection');
 
 module.exports = {
+    Event,
+    EventMember,
     Game,
     Hub,
-    HubMember,
     Player,
     Report,
-    Season,
     User,
+    sequelize,
 };
