@@ -13,6 +13,9 @@
                 "minProperties": 2,
                 "consistent": true
             }
-        }]
+        }],
+        "no-restricted-syntax": "off",
+        "no-await-in-loop": "off",
+        "no-param-reassign": "off"
     }
 }
