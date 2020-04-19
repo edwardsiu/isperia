@@ -1,5 +1,10 @@
 {
-    "extends": "airbnb",
+    "extends": [
+        "airbnb",
+    ],
+    "env": {
+        "mocha": true
+    },
     "rules": {
         "indent": [2, 4],
         "object-curly-newline": ["error", {
