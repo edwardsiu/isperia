@@ -2,6 +2,7 @@ const axios = require('axios');
 const _ = require('lodash');
 const { URL } = require('url');
 const xml2js = require('xml2js');
+const { normalizeCardName } = require('../utils');
 
 function matches(url) {
     const parsed = new URL(url);
@@ -9,8 +10,12 @@ function matches(url) {
 }
 
 function toObject(obj, card) {
+    const normalized = normalizeCardName(card.Name);
     return Object.assign(obj, {
-        [card.Name]: { quantity: Number(card.Quantity) },
+        [normalized]: {
+            name: card.Name,
+            quantity: Number(card.Quantity),
+        },
     });
 }
 

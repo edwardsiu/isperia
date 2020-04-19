@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { URL } = require('url');
+const { normalizeCardName } = require('../utils');
 
 function matches(url) {
     const parsed = new URL(url);
@@ -7,8 +8,13 @@ function matches(url) {
 }
 
 function toObject(obj, card) {
+    const cardName = card.card.oracleCard.name;
+    const normalized = normalizeCardName(cardName);
     return Object.assign(obj, {
-        [card.card.oracleCard.name]: { quantity: Number(card.quantity) },
+        [normalized]: {
+            name: cardName,
+            quantity: Number(card.quantity),
+        },
     });
 }
 

@@ -1,6 +1,7 @@
 const axios = require('axios');
 const csvtojson = require('csvtojson');
 const { URL } = require('url');
+const { normalizeCardName } = require('../utils');
 
 function matches(url) {
     const parsed = new URL(url);
@@ -8,8 +9,12 @@ function matches(url) {
 }
 
 function toObject(obj, card) {
+    const normalized = normalizeCardName(card.Name);
     return Object.assign(obj, {
-        [card.Name]: { quantity: Number(card.Qty) },
+        [normalized]: {
+            name: card.Name,
+            quantity: Number(card.Qty),
+        },
     });
 }
 

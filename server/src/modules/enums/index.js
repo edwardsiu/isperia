@@ -4,10 +4,10 @@ exports.MAX_SAVED_DECKS = 50;
  * @enum {string}
  */
 exports.SortOptions = {
-    usage: 'usage',
-    usage_rate: 'usage_rate',
-    wins: 'wins',
-    win_rate: 'win_rate',
+    USAGE: 'usage',
+    USAGE_RATE: 'usage_rate',
+    WINS: 'wins',
+    WIN_RATE: 'win_rate',
 };
 
 /**
@@ -15,8 +15,8 @@ exports.SortOptions = {
  * @enum {string}
  */
 exports.Reports = {
-    card_data: 'card_data',
-    commander_data: 'commander_data',
+    CARD_DATA: 'card_data',
+    COMMANDER_DATA: 'commander_data',
 };
 
 /**
@@ -24,14 +24,57 @@ exports.Reports = {
  * @enum {string}
  */
 exports.SupportedSource = {
-    discord: 'discord',
+    DISCORD: 'discord',
 };
 
 /**
  * @enum {string}
  */
 exports.EventStatus = {
-    scheduled: 'scheduled',
-    active: 'active',
-    ended: 'ended',
+    SCHEDULED: 'scheduled',
+    ACTIVE: 'active',
+    ENDED: 'ended',
+};
+
+/**
+ * Deck archetypes/tag names
+ * @enum {string}
+ */
+exports.Archetypes = {
+    ALUREN: 'Aluren',
+    BIRTHING_POD: 'Pod',
+    CHAIN_VEIL: 'Chain Veil',
+    CONSULT: 'Consult',
+    CURIOSITY: 'Curiosity',
+    DIVERGENT: 'Divergent',
+    DREDGE: 'Dredge',
+    DOOMSDAY: 'Doomsday',
+    FOOD_CHAIN: 'Food Chain',
+    FUTURE_TOP: 'Future Top',
+    HERMIT: 'Hermit',
+    HULK: 'Hulk',
+    POLYMORPH: 'Polymorph',
+    REANIMATOR: 'Reanimator',
+    SCEPTER: 'Scepter',
+    STAX: 'Stax',
+    STORM: 'Storm',
+    THIEF: 'Thief',
+    TURBO_NAUS: 'Turbo Naus',
+    TURNS: 'Turns',
+    TWIN: 'Twin',
+    UNDERWORLD_BREACH: 'Breach',
+};
+
+exports.ArchetypesShort = {
+    [exports.Archetypes.BIRTHING_POD]: 'Pod',
+    [exports.Archetypes.DOOMSDAY]: 'DD',
+    [exports.Archetypes.FOOD_CHAIN]: 'FC',
+    [exports.Archetypes.FUTURE_TOP]: 'Top',
+    [exports.Archetypes.TURBO_NAUS]: 'Farm',
+};
+
+exports.ArchetypePosition = {
+    PREFIX: 'prefix',
+    SUFFIX: 'suffix',
+    SUPER_SUFFIX: 'super_suffix',
 };

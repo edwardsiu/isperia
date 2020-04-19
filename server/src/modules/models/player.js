@@ -5,9 +5,34 @@ const { Game } = require('./game');
 const { User } = require('./user');
 
 /**
+ * @typedef {Object} Card
+ * @property {string} name
+ * @property {number} quantity
+ */
+
+/**
+ * @typedef {Object} Deck
+ * @property {string} name
+ * @property {string[]} archetypes
+ * @property {Object.<string, Card>} commanders
+ * @property {Object.<string, Card>} mainboard
+ * @property {Object.<string, Card>} sideboard
+ */
+
+/**
+ * @typedef {Object} Player
+ * @property {string} userId
+ * @property {string} gameId
+ * @property {string} eventId
+ * @property {boolean} isVerified
+ * @property {boolean} isWinner
+ * @property {Deck} deck
+ */
+
+/**
  * @extends Model
  */
-class Player extends Model { }
+class Player extends Model {}
 
 Player.init({
     userId: {
