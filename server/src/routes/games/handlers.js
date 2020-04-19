@@ -21,6 +21,18 @@ async function createGame(ctx) {
     };
 }
 
+async function confirmPlayer(ctx) {
+    const {
+        gameId,
+        playerId,
+    } = ctx.params;
+
+    await GameController.confirmPlayer(gameId, playerId);
+
+    ctx.status = HttpStatus.OK;
+}
+
 module.exports = {
     createGame,
+    confirmPlayer,
 };

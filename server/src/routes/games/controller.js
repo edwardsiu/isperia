@@ -13,7 +13,7 @@ const { sequelize, Event, EventMember, Game, Player } = require('../../modules/m
 async function createGameWithPlayers(eventId, userIds, winnerId, source) {
     const response = await sequelize.transaction(async (t) => {
         const event = await Event.findByPk(eventId, { transaction: t });
-        if (!event || event.status !== EventStatus.active) {
+        if (!event || event.status !== EventStatus.ACTIVE) {
             throw new Error(`Invalid or inactive event ${eventId}`);
         }
         const eventMembers = await EventMember.findAll({
@@ -45,8 +45,27 @@ async function createGameWithPlayers(eventId, userIds, winnerId, source) {
     return response;
 }
 
+async function confirmPlayer(gameId, userId) {
+    const game = await Game.findByPk(gameId);
+    const players = await Player.findAll({
+        where: { gameId },
+    });
+    await sequelize.transaction(async (t) => {
+        const player = players.find((p) => p.userId === userId);
+        player.isVerified = true;
+        if (!players.find((p) => !p.isVerified)) {
+            game.isVerified = true;
+        }
+        await Promise.all([
+            game.save({ transaction: t }),
+            player.save({ transaction: t }),
+        ]);
+    });
+}
+
 module.exports = {
     GameController: {
         createGameWithPlayers,
+        confirmPlayer,
     },
 };

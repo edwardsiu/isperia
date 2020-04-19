@@ -65,14 +65,14 @@ async function extractAndTransformCardData(column) {
 }
 
 async function generateCardReport() {
-    const cardData = await extractAndTransformCardData('decklist');
+    const cardData = await extractAndTransformCardData('mainboard');
     await Report.upsert({
-        name: Reports.card_data,
+        name: Reports.CARD_DATA,
         data: cardData,
     });
     const commanderData = await extractAndTransformCardData('commanders');
     await Report.upsert({
-        name: Reports.commander_data,
+        name: Reports.COMMANDER_DATA,
         data: commanderData,
     });
 }
