@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes, Model } = require('sequelize');
 const { sequelize } = require('./connection');
-const { Hub } = require('./hub');
+const { Community } = require('./community');
 
 /**
  * @extends Model
@@ -13,10 +13,10 @@ Event.init({
         type: DataTypes.UUID,
         defaultValue: Sequelize.UUIDV4,
     },
-    hubId: {
+    communityId: {
         type: DataTypes.UUID,
         references: {
-            model: Hub,
+            model: Community,
             key: 'id',
         },
     },

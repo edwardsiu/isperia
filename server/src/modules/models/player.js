@@ -13,7 +13,7 @@ const { User } = require('./user');
 /**
  * @typedef {Object} Deck
  * @property {string} name
- * @property {string[]} archetypes
+ * @property {Object.<string, Boolean>} archetypes
  * @property {Object.<string, Card>} commanders
  * @property {Object.<string, Card>} mainboard
  * @property {Object.<string, Card>} sideboard

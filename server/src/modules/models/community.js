@@ -4,9 +4,9 @@ const { sequelize } = require('./connection');
 /**
  * @extends Model
  */
-class Hub extends Model { }
+class Community extends Model { }
 
-Hub.init({
+Community.init({
     id: {
         primaryKey: true,
         type: DataTypes.UUID,
@@ -17,12 +17,13 @@ Hub.init({
     },
     settings: {
         type: DataTypes.JSONB,
+        defaultValue: {},
     },
 }, {
     sequelize,
-    modelName: 'Hub',
+    modelName: 'Community',
 });
 
 module.exports = {
-    Hub,
+    Community,
 };
