@@ -21,7 +21,7 @@ Community.init({
     },
 }, {
     sequelize,
-    modelName: 'Community',
+    modelName: 'community',
 });
 
 module.exports = {

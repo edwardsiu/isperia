@@ -16,7 +16,7 @@ Report.init({
     },
 }, {
     sequelize,
-    modelName: 'Report',
+    modelName: 'report',
 });
 
 module.exports = {

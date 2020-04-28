@@ -29,7 +29,7 @@ Game.init({
     },
 }, {
     sequelize,
-    modelName: 'Game',
+    modelName: 'game',
 });
 
 module.exports = {

@@ -38,7 +38,7 @@ EventMember.init({
     },
 }, {
     sequelize,
-    modelName: 'EventMember',
+    modelName: 'event_member',
 });
 
 module.exports = {

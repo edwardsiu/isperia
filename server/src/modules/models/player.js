@@ -71,7 +71,7 @@ Player.init({
     },
 }, {
     sequelize,
-    modelName: 'Player',
+    modelName: 'player',
     indexes: [
         {
             fields: ['deck'],

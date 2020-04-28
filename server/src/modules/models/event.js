@@ -31,14 +31,7 @@ Event.init({
     },
 }, {
     sequelize,
-    modelName: 'Event',
-    indexes: [
-        {
-            name: 'name_index',
-            using: 'BTREE',
-            fields: ['name'],
-        },
-    ],
+    modelName: 'event',
 });
 
 module.exports = {
