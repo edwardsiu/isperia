@@ -1,0 +1,23 @@
+{
+  "name": "isperia-discord",
+  "version": "1.0.0",
+  "description": "Discord client for Isperia",
+  "main": "index.js",
+  "scripts": {
+    "start": "node -r dotenv/config src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "config": "^3.3.1",
+    "discord.js": "^12.2.0",
+    "lodash": "^4.17.15",
+    "moment": "^2.25.0"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "eslint": "^6.8.0"
+  }
+}
