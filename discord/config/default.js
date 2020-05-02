@@ -15,5 +15,6 @@ module.exports = {
         uri: process.env.MONGO_CONNECTION_STRING,
         database: 'develop',
     },
+    log_level: process.env.LOG_LEVEL || 'debug',
 };
 

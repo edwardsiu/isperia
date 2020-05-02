@@ -19,6 +19,13 @@ mongoClient.connect().then(() => {
         console.log(`Logged in as ${bot.user.tag}`);
     });
 
+    bot.on('guildCreate', async (guild) => {
+        const guildMap = await bot.getGuildByDiscordId(guild.id);
+        if (guildMap) return;
+        const { communityId } = await IsperiaService.createCommunity(guild.name);
+        await bot.createGuildMap(guild.id, communityId);
+    });
+
     bot.on('message', async (msg) => {
         return bot.resolve(msg);
     });

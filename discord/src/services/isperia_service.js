@@ -2,6 +2,7 @@ const axios = require('axios').default;
 const config = require('config');
 const _ = require('lodash');
 const moment = require('moment');
+const logger = require('../modules/logger').named('IsperiaService');
 const { urlJoin } = require('../modules/utils');
 
 const CACHE = {};
@@ -31,33 +32,83 @@ function tokenExpired() {
     return (!_.has(CACHE, 'credentials.expires') || _.get(CACHE, 'credentials.expires') <= moment());
 }
 
+/**
+ * 
+ * @param {Object} requestConfig 
+ */
 async function request(requestConfig) {
     if (tokenExpired()) {
         await authenticate();
     }
     _.set(
         requestConfig,
-        'headers.Authentication',
+        'headers.Authorization',
         `${CACHE.credentials.tokenType} ${CACHE.credentials.token}`,
     );
     requestConfig.url = urlJoin(config.get('isperia.api_url'), requestConfig.url);
-    const response = await axios(requestConfig);
-    return response.data;
+    return axios(requestConfig);
+}
+
+function logRequestError(err) {
+    logger.warn(`${err.config.method} ${err.config.url} [${err.response.status}]: ${JSON.stringify(err.response.data)}`);
 }
 
 async function createUser(name) {
-    const { userId } = await request({
-        url: '/users',
-        method: 'POST',
-        data: {
-            name,
-        },
-    });
-    return { userId };
+    try {
+        const { data } = await request({
+            url: '/users',
+            method: 'POST',
+            data: {
+                name,
+            },
+        });
+        return { userId: data.userId };
+    } catch(err) {
+        logRequestError(err);
+    }
+}
+
+async function createCommunity(name) {
+    try {
+        const { data } = await request({
+            url: '/communities',
+            method: 'POST',
+            data: {
+                name,
+            },
+        });
+        return { communityId: data.communityId };
+    } catch(err) {
+        logRequestError(err);
+    }
+}
+
+/**
+ * Registers the user to the current active event for community
+ *
+ * @param {String} userId 
+ * @param {String} communityId 
+ * @returns {Promise<Object>} If registration was successful, the event info object
+ */
+async function registerToCurrentCommunityEvent(userId, communityId) {
+    try {
+        const { data } = await request({
+            url: `/communities/${communityId}/events/current`,
+            method: 'POST',
+            data: {
+                userId,
+            },
+        });
+        return { eventName: data.eventName };
+    } catch(err) {
+        logRequestError(err);
+    }
 }
 
 module.exports = {
     authenticate,
     request,
     createUser,
+    createCommunity,
+    registerToCurrentCommunityEvent,
 };

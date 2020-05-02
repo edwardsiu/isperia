@@ -54,8 +54,8 @@ class BotClient extends Discord.Client {
             user,
             guild,
         ] = await Promise.all([
-            this.getUserMap(message.author.id),
-            this.getGuildMap(_.get(message, 'guild.id')),
+            this.getUserByDiscordId(message.author.id),
+            this.getGuildByDiscordId(_.get(message, 'guild.id')),
         ]);
         return {
             bot: this,
@@ -99,24 +99,54 @@ class BotClient extends Discord.Client {
         }
     }
 
+    /**
+     * Creates a mapping of API user ID to discord Id in the datastore
+     *
+     * @param {String} discordId 
+     * @param {String} userId 
+     * @param {Object} roles 
+     * @returns {Promise}
+     */
     async createUserMap(discordId, userId, roles) {
         const user = await this.db.collection(Collections.USERS).findOne({ userId });
         if (user) return user;
-        await this.db.collection(Collections.USERS).insertOne({
+        return this.db.collection(Collections.USERS).insertOne({
             userId: userId,
             discordId: discordId,
             roles,
         });
-        return { discordId, userId, roles }
     }
 
-    async getUserMap(discordId) {
+    /**
+     * 
+     * @param {String} discordId 
+     * @returns {Promise<UserMap>}
+     */
+    async getUserByDiscordId(discordId) {
         if (!discordId) return;
         return this.db.collection(Collections.USERS).findOne({
             discordId,
         });
     }
 
+    /**
+     * 
+     * @param {String} userId 
+     * @returns {Promise<UserMap>}
+     */
+    async getUserByUserId(userId) {
+        if (!userId) return;
+        return this.db.collection(Collections.USERS).findOne({
+            userId,
+        });
+    }
+
+    /**
+     * 
+     * @param {String} discordId 
+     * @param {String} communityId 
+     * @returns {Promise}
+     */
     async createGuildMap(discordId, communityId) {
         const guild = await this.db.collection(Collections.GUILDS).findOne({ communityId });
         if (guild) return;
@@ -126,10 +156,27 @@ class BotClient extends Discord.Client {
         });
     }
 
-    async getGuildMap(discordId) {
+    /**
+     * 
+     * @param {String} discordId 
+     * @returns {Promise<GuildMap>}
+     */
+    async getGuildByDiscordId(discordId) {
         if (!discordId) return;
         return this.db.collection(Collections.GUILDS).findOne({
             discordId,
+        });
+    }
+
+    /**
+     * 
+     * @param {String} communityId 
+     * @returns {Promise<GuildMap>}
+     */
+    async getGuildByCommunityId(communityId) {
+        if (!communityId) return;
+        return this.db.collection(Collections.GUILDS).findOne({
+            communityId,
         });
     }
 }
