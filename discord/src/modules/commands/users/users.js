@@ -1,5 +1,5 @@
 const { Command } = require('../command');
-const { Embed } = require('../../embeds');
+const { Embed, Fmt } = require('../../embeds');
 const { Roles } = require('../../enums');
 const { Controller } = require('../controller');
 
@@ -15,7 +15,7 @@ const register = new Command({
         // Register the user to the event
         // Respond with success or failure
         ctx.message.channel.send(Embed.success({
-            description: `Registered **${ctx.message.author.tag}**`,
+            description: `Registered ${Fmt.bold(ctx.message.author.tag)}`,
         }));
     }
 });

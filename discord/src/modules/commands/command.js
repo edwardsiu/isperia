@@ -1,6 +1,5 @@
-const config = require('config');
 const _ = require('lodash');
-const { Embed } = require('../embeds');
+const { Embed, Fmt } = require('../embeds');
 const { Roles } = require('../enums');
 
 class Command {
@@ -15,7 +14,7 @@ class Command {
     help(argv) {
         const text = this._help ? this._help(argv) : this.description;
         return Embed.info({
-            title: `Help: \`${this.name}\``,
+            title: `Help: ${Fmt.code(this.name)}`,
             description: text,
         });
     }

@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const _ = require('lodash');
 const { MongoClient } = require('mongodb');
 const commands = require('./modules/commands');
-const { Embed } = require('./modules/embeds');
+const { Embed, Fmt } = require('./modules/embeds');
 const { Collections, ReservedCommands } = require('./modules/enums');
 const { parseMessage } = require('./modules/utils');
 
@@ -83,14 +83,14 @@ class BotClient extends Discord.Client {
             const command = argv[0];
             if (!commands[command]) {
                 return ctx.message.channel.send(Embed.error({
-                    description: `**${command}** is not a valid command`,
+                    description: `${Fmt.bold(command)} is not a valid command`,
                 }));
             }
             return ctx.message.channel.send(commands[command].help(argv.slice(1)));
         } else {
             const response = Object.keys(commands)
                 .sort()
-                .map(command => `\`${command}\` - ${commands[command].description}`)
+                .map(command => `${Fmt.code(command)} - ${commands[command].description}`)
                 .join('\n');
             return ctx.message.channel.send(Embed.info({
                 title: 'Help',
