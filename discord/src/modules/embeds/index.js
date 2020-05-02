@@ -1,22 +1,23 @@
 const { MessageEmbed } = require('discord.js');
+const { Color } = require('./enums');
 
 function success(options = {}) {
-    options.color = 1828126;
+    options.color = Color.GREEN;
     return new MessageEmbed(options);
 }
 
 function ok(options = {}) {
-    options.color = 4385012;
+    options.color = Color.BLUE;
     return new MessageEmbed(options);
 }
 
 function info(options = {}) {
-    options.color = 16768028;
+    options.color = Color.YELLOW;
     return new MessageEmbed(options);
 }
 
 function error(options = {}) {
-    options.color = 16711680;
+    options.color = Color.RED;
     return new MessageEmbed(options);
 }
 
