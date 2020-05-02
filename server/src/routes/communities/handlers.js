@@ -1,6 +1,6 @@
 const HttpStatus = require('http-status-codes');
 const { RequestError } = require('../../modules/errors');
-const { Community, Event } = require('../../modules/models');
+const { Community, Event, EventMember, User } = require('../../modules/models');
 const { CommunityController } = require('./controller');
 
 async function createCommunity(ctx) {
@@ -38,8 +38,32 @@ async function createEvent(ctx) {
     ctx.body = { eventId: event.id };
 }
 
+async function joinCurrentEvent(ctx) {
+    const { communityId } = ctx.params;
+    const { userId } = ctx.request.body;
+    const activeEvent = await CommunityController.getNewestActiveEvent(communityId);
+    if (!activeEvent) {
+        ctx.throw(new RequestError(HttpStatus.NOT_FOUND, 'No active events for community'));
+    }
+    const user = await User.findByPk(userId);
+    if (!user) {
+        ctx.throw(new RequestError(HttpStatus.NOT_FOUND, 'User does not exist'));
+    }
+    await EventMember.findOrCreate({
+        where: {
+            userId,
+            eventId: activeEvent.id,
+        },
+    });
+    ctx.status = HttpStatus.OK;
+    ctx.body = {
+        eventName: activeEvent.name,
+    };
+}
+
 module.exports = {
     createCommunity,
     getEvents,
     createEvent,
+    joinCurrentEvent,
 };

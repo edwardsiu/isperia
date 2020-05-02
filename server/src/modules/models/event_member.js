@@ -12,6 +12,7 @@ EventMember.init({
     userId: {
         primaryKey: true,
         type: DataTypes.UUID,
+        allowNull: false,
         references: {
             model: User,
             key: 'id',
@@ -20,6 +21,7 @@ EventMember.init({
     eventId: {
         primaryKey: true,
         type: DataTypes.UUID,
+        allowNull: false,
         references: {
             model: Event,
             key: 'id',
@@ -27,6 +29,7 @@ EventMember.init({
     },
     lfg: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
     },
     lfgTimestamp: {
         type: DataTypes.DATE,
@@ -34,7 +37,7 @@ EventMember.init({
     },
     properties: {
         type: DataTypes.JSONB,
-        allowNull: true,
+        defaultValue: {},
     },
 }, {
     sequelize,

@@ -23,10 +23,10 @@ function toObject(obj, card) {
  * @returns {Object}
  */
 async function extractCardData(column) {
-    const SELECT_ALL_CARDS = `SELECT jsonb_object_keys(Players.deck->${column}) as name FROM Players WHERE Players.isVerified=true`;
-    const SELECT_WINNING_CARDS = `${SELECT_ALL_CARDS} AND Players.isWinner=true`;
+    const SELECT_ALL_CARDS = `SELECT jsonb_object_keys(Players.deck->${column}) as name FROM Players WHERE Players.'isVerified'=true`;
+    const SELECT_WINNING_CARDS = `${SELECT_ALL_CARDS} AND Players.'isWinner'=true`;
     const [numDecks] = await sequelize.query(
-        'SELECT count(*) FROM players WHERE players.isVerified=true',
+        'SELECT count(*) FROM players WHERE players.`isVerified`=true',
     );
     const [allCardsData] = await sequelize.query(
         `SELECT cards.name, count(cards.name) FROM (${SELECT_ALL_CARDS}) cards GROUP BY cards.name`,

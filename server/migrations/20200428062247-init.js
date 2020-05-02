@@ -91,6 +91,7 @@ module.exports = {
             },
             lfg: {
                 type: Sequelize.DataTypes.BOOLEAN,
+                defaultValue: false,
             },
             lfgTimestamp: {
                 type: Sequelize.DataTypes.DATE,
@@ -98,7 +99,7 @@ module.exports = {
             },
             properties: {
                 type: Sequelize.DataTypes.JSONB,
-                allowNull: true,
+                defaultValue: {},
             },
             createdAt: {
                 type: Sequelize.DataTypes.DATE,

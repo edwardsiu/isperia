@@ -102,13 +102,7 @@ const CLASSIFIERS = [
     {
         name: Archetypes.HULK,
         position: ArchetypePosition.SUFFIX,
-        match: (deck) => (
-            has(deck, 'protean hulk')
-            && hasAtLeast(deck, 1, [
-                'flash',
-                'necromancy',
-            ])
-        ),
+        match: (deck) => has(deck, 'protean hulk'),
     },
     {
         name: Archetypes.POLYMORPH,
