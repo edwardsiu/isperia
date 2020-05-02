@@ -3,6 +3,14 @@ const { Embed, Fmt } = require('../embeds');
 const { Roles } = require('../enums');
 
 class Command {
+    /**
+     * @param {Object} options
+     * @param {String} options.name
+     * @param {String} options.description
+     * @param {Function} options.help
+     * @param {String[]} options.roles
+     * @param {Function} options.resolver Function taking (ctx, argv)
+     */
     constructor({ name, description, help, roles, resolver }) {
         this.name = name;
         this.description = description || '';
@@ -21,7 +29,7 @@ class Command {
 
     resolve(ctx, argv) {
         if (!this.validateRoles(ctx)) return;
-        return this.resolver(ctx, ...argv);
+        return this.resolver(ctx, argv);
     }
 
     validateRoles(ctx) {
