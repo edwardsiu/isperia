@@ -1,6 +1,6 @@
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('user', {
+        await queryInterface.createTable('users', {
             id: {
                 primaryKey: true,
                 type: Sequelize.DataTypes.UUID,
@@ -13,8 +13,14 @@ module.exports = {
                 type: Sequelize.DataTypes.JSONB,
                 defaultValue: {},
             },
+            createdAt: {
+                type: Sequelize.DataTypes.DATE,
+            },
+            updatedAt: {
+                type: Sequelize.DataTypes.DATE,
+            },
         });
-        await queryInterface.createTable('community', {
+        await queryInterface.createTable('communities', {
             id: {
                 primaryKey: true,
                 type: Sequelize.DataTypes.UUID,
@@ -27,8 +33,14 @@ module.exports = {
                 type: Sequelize.DataTypes.JSONB,
                 defaultValue: {},
             },
+            createdAt: {
+                type: Sequelize.DataTypes.DATE,
+            },
+            updatedAt: {
+                type: Sequelize.DataTypes.DATE,
+            },
         });
-        await queryInterface.createTable('event', {
+        await queryInterface.createTable('events', {
             id: {
                 primaryKey: true,
                 type: Sequelize.DataTypes.UUID,
@@ -38,7 +50,7 @@ module.exports = {
                 type: Sequelize.DataTypes.UUID,
                 allowNull: false,
                 references: {
-                    model: 'community',
+                    model: 'communities',
                     key: 'id',
                 },
             },
@@ -51,14 +63,20 @@ module.exports = {
             settings: {
                 type: Sequelize.DataTypes.JSONB,
             },
+            createdAt: {
+                type: Sequelize.DataTypes.DATE,
+            },
+            updatedAt: {
+                type: Sequelize.DataTypes.DATE,
+            },
         });
-        await queryInterface.createTable('event_member', {
+        await queryInterface.createTable('event_members', {
             userId: {
                 primaryKey: true,
                 type: Sequelize.DataTypes.UUID,
                 allowNull: false,
                 references: {
-                    model: 'user',
+                    model: 'users',
                     key: 'id',
                 },
             },
@@ -67,7 +85,7 @@ module.exports = {
                 type: Sequelize.DataTypes.UUID,
                 allowNull: false,
                 references: {
-                    model: 'event',
+                    model: 'events',
                     key: 'id',
                 },
             },
@@ -82,8 +100,14 @@ module.exports = {
                 type: Sequelize.DataTypes.JSONB,
                 allowNull: true,
             },
+            createdAt: {
+                type: Sequelize.DataTypes.DATE,
+            },
+            updatedAt: {
+                type: Sequelize.DataTypes.DATE,
+            },
         });
-        await queryInterface.createTable('game', {
+        await queryInterface.createTable('games', {
             id: {
                 primaryKey: true,
                 type: Sequelize.DataTypes.UUID,
@@ -93,7 +117,7 @@ module.exports = {
                 type: Sequelize.DataTypes.UUID,
                 allowNull: false,
                 references: {
-                    model: 'event',
+                    model: 'events',
                     key: 'id',
                 },
             },
@@ -104,14 +128,20 @@ module.exports = {
                 type: Sequelize.DataTypes.BOOLEAN,
                 defaultValue: false,
             },
+            createdAt: {
+                type: Sequelize.DataTypes.DATE,
+            },
+            updatedAt: {
+                type: Sequelize.DataTypes.DATE,
+            },
         });
-        await queryInterface.createTable('player', {
+        await queryInterface.createTable('players', {
             userId: {
                 primaryKey: true,
                 type: Sequelize.DataTypes.UUID,
                 allowNull: false,
                 references: {
-                    model: 'user',
+                    model: 'users',
                     key: 'id',
                 },
             },
@@ -120,7 +150,7 @@ module.exports = {
                 type: Sequelize.DataTypes.UUID,
                 allowNull: false,
                 references: {
-                    model: 'game',
+                    model: 'games',
                     key: 'id',
                 },
             },
@@ -128,7 +158,7 @@ module.exports = {
                 type: Sequelize.DataTypes.UUID,
                 allowNull: false,
                 references: {
-                    model: 'event',
+                    model: 'events',
                     key: 'id',
                 },
             },
@@ -143,8 +173,14 @@ module.exports = {
             deck: {
                 type: Sequelize.DataTypes.JSONB,
             },
+            createdAt: {
+                type: Sequelize.DataTypes.DATE,
+            },
+            updatedAt: {
+                type: Sequelize.DataTypes.DATE,
+            },
         });
-        await queryInterface.createTable('report', {
+        await queryInterface.createTable('reports', {
             name: {
                 primaryKey: true,
                 type: Sequelize.DataTypes.STRING,
@@ -152,20 +188,26 @@ module.exports = {
             data: {
                 type: Sequelize.DataTypes.JSONB,
             },
+            createdAt: {
+                type: Sequelize.DataTypes.DATE,
+            },
+            updatedAt: {
+                type: Sequelize.DataTypes.DATE,
+            },
         });
-        await queryInterface.addIndex('player', {
+        await queryInterface.addIndex('players', {
             fields: ['deck'],
             using: 'gin',
         });
     },
 
     down: async (queryInterface) => {
-        await queryInterface.dropTable('report');
-        await queryInterface.dropTable('player');
-        await queryInterface.dropTable('game');
-        await queryInterface.dropTable('event_member');
-        await queryInterface.dropTable('event');
-        await queryInterface.dropTable('community');
-        await queryInterface.dropTable('user');
+        await queryInterface.dropTable('reports');
+        await queryInterface.dropTable('players');
+        await queryInterface.dropTable('games');
+        await queryInterface.dropTable('event_members');
+        await queryInterface.dropTable('events');
+        await queryInterface.dropTable('communities');
+        await queryInterface.dropTable('users');
     },
 };
