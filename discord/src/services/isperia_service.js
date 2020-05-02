@@ -2,6 +2,7 @@ const axios = require('axios').default;
 const config = require('config');
 const _ = require('lodash');
 const moment = require('moment');
+const { urlJoin } = require('../modules/utils');
 
 const CACHE = {};
 
@@ -39,11 +40,24 @@ async function request(requestConfig) {
         'headers.Authentication',
         `${CACHE.credentials.tokenType} ${CACHE.credentials.token}`,
     );
+    requestConfig.url = urlJoin(config.get('isperia.api_url'), requestConfig.url);
     const response = await axios(requestConfig);
     return response.data;
+}
+
+async function createUser(name) {
+    const { userId } = await request({
+        url: '/users',
+        method: 'POST',
+        data: {
+            name,
+        },
+    });
+    return { userId };
 }
 
 module.exports = {
     authenticate,
     request,
+    createUser,
 };
