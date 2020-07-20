@@ -14,7 +14,7 @@
     "config": "^3.3.1",
     "discord.js": "^12.2.0",
     "http-status-codes": "^1.4.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.25.0",
     "mongodb": "^3.5.7",
     "winston": "^3.2.1"
